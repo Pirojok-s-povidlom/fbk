@@ -1,8 +1,12 @@
-
 #!/usr/bin/env python3
 # def application(env, start_response):
 #     start_response('200 OK', [('Content-Type','text/html')])
 #     return [b"H2ello World"]
+
+# with conn.cursor() as cursor:
+#     cursor.execute('CREATE TABLE IF NOT EXISTS fbk_data (data varchar(1000) NOT NULL);')
+#     cursor.execute('SELECT * FROM fbk_data')
+#     cursor.fetchall()
 
 import psycopg2
 from psycopg2 import sql
@@ -15,21 +19,22 @@ conn = psycopg2.connect(
 )
 conn.set_session(autocommit=True)
 
-with conn.cursor() as cursor:
-    cursor.execute('CREATE TABLE IF NOT EXISTS fbk_data (data varchar(1000) NOT NULL);')
-    value = ['KALA']
-    cursor.execute("INSERT INTO fbk_data(data) VALUES (%s)",(value))
-    cursor.execute('SELECT * FROM fbk_data LIMIT 10')
-    cursor.fetchall()
-
-
 def application(environ, start_response):
-    #response_body = environ['REQUEST_METHOD'].encode('utf-8')
-    response_body += environ['wsgi.input'].read()
+    # response_body = environ['REQUEST_METHOD'].encode('utf-8')
+    response_body = environ['wsgi.input'].read()
     status = '200 OK'
+    print(response_body.decode("utf-8"))
     if environ['REQUEST_METHOD'] == 'POST':
-        print(environ['wsgi.input'].read())
-    print(environ['wsgi.input'].read())
+        with conn.cursor() as cursor:
+            cursor.execute('CREATE TABLE IF NOT EXISTS fbk_data (data varchar(1000) NOT NULL);')
+            cursor.execute("INSERT INTO fbk_data(data) VALUES (%s)",[(response_body.decode("utf-8"))] )
+    elif environ['REQUEST_METHOD'] == 'GET':
+        with conn.cursor() as cursor:
+            cursor.execute('SELECT * FROM fbk_data')
+            response_body = ''.join(map(str, cursor.fetchall())).encode()
+            print(response_body)
+
+    # print(environ['wsgi.input'].read())
     headers = [('Content-Type', 'text/html'),
             ('Content-Length', str(len(response_body)))]
     start_response(status, headers)
