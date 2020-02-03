@@ -1,0 +1,22 @@
+version: '3'
+services:
+  app:
+    container_name: fbk_app
+    build: .
+    image: fbk:latest
+    hostname: fbk_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - fbk_db
+    links:
+      - "fbk_db"
+
+  fbk_db:
+    container_name: fbk_db
+    image: postgres
+    hostname: fbk_db
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_USER=mluzgin
+      - POSTGRES_DB=fbk

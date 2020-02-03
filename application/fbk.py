@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import psycopg2
 
-conn = psycopg2.connect( host="localhost", database="fbk", user="mluzgin", password="mysecretpassword" )
+conn = psycopg2.connect( host="fbk_db", database="fbk", user="mluzgin", password="mysecretpassword" )
 conn.set_session(autocommit=True)
 
 def application(environ, start_response):
