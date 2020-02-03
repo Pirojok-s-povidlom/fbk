@@ -13,7 +13,11 @@ To get all posted entries use the common GET request to http://localhost:8080/
 To disable GET requests uncomment script ```fbk/nginx/prestart.sh```
 
 Links:
+
 https://uwsgi-docs.readthedocs.io/en/latest/WSGIquickstart.html
+
 https://www.toptal.com/python/pythons-wsgi-server-application-interface
+
 https://www.psycopg.org/docs/usage.html?highlight=gunpoint
+
 https://hub.docker.com/r/tiangolo/uwsgi-nginx
